@@ -4,6 +4,7 @@
 
 * This is the BioMechPro pipeline (with newly developed modules) for processing both the optical motion capture system in the Lopes lab and 
   the data from the wearable kinetic measurement system (Xsens + Moticon pressure insoles).
+* This pipline is based on a developed framework in UT BE group. Orginal repo can be found here: https://bitbucket.org/ctw-bw/biomechpro/wiki/Home
 * 1.0
 
 ### How do I set up? ###
