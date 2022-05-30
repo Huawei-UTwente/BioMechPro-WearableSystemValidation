@@ -9,7 +9,7 @@
 
 ### How do I set up? ###
 
-* Check Wiki of the origional BioMechPro pipeline for basic operation guidline: [https://bitbucket.org/ctw-bw/biomechpro/wiki/Home](https://universiteittwente-my.sharepoint.com/:f:/r/personal/h_wang-2_utwente_nl/Documents/Research/BioMechPro_Intro?csf=1&web=1&e=0bs9oI)
+* Check Wiki of the origional BioMechPro pipeline for basic operation [guidline](https://universiteittwente-my.sharepoint.com/:f:/r/personal/h_wang-2_utwente_nl/Documents/Research/BioMechPro_Intro?csf=1&web=1&e=TC5apc)
 * Download this repository
 * Download the experimental data from here: https://doi.org/10.5281/zenodo.6457662
 * Add the folder and all subfolder into your Matlab path
