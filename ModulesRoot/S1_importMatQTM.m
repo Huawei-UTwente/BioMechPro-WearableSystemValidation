@@ -102,9 +102,12 @@ QTMData=importdata(fullFileName);
 % Put data into correct structure (Datastr that is used for further processing)
 % Marker data:
 DatastrRaw.Marker.FrameRate=QTMData.FrameRate;
-DatastrRaw.Marker.DataLabel=QTMData.Trajectories.Labeled.Labels;
-DatastrRaw.Marker.MarkerData=squeeze(QTMData.Trajectories.Labeled.Data(:,1:3,:))/1000;
-DatastrRaw.Marker.units = 'm';
+
+if isfield(QTMData, 'Trajectories')  % if marker exist, then load it
+    DatastrRaw.Marker.DataLabel=QTMData.Trajectories.Labeled.Labels;
+    DatastrRaw.Marker.MarkerData=squeeze(QTMData.Trajectories.Labeled.Data(:,1:3,:))/1000;
+    DatastrRaw.Marker.units = 'm';
+end
 
 % Store marker data into Datastr
 Datastr.Marker = DatastrRaw.Marker;
