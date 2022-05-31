@@ -114,7 +114,7 @@ Datastr.Marker = DatastrRaw.Marker;
 
 if strcmp(fSign, 'True')
     % Force data: Label
-    if isempty(Datastr.Info, 'ForceLabel')
+    if isfield(Datastr.Info, 'ForceLabel')
         DatastrRaw.Force.DataLabel = Datastr.Info.ForceLabel;
     end
     
