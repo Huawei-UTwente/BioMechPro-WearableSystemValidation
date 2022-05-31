@@ -114,7 +114,9 @@ Datastr.Marker = DatastrRaw.Marker;
 
 if strcmp(fSign, 'True')
     % Force data: Label
-    DatastrRaw.Force.DataLabel = Datastr.Info.ForceLabel;
+    if isempty(Datastr.Info, 'ForceLabel')
+        DatastrRaw.Force.DataLabel = Datastr.Info.ForceLabel;
+    end
     
     % save data based on the order of force label and transform vector
     % ["Fx", "Fy", "Fz", "Mx", "My", "Mz",  "CoPx", "CoPy", "CoPz"]  
@@ -141,7 +143,9 @@ end
 if strcmp(eSign, 'True')
     % extract EMG data
     DatastrRaw.EMG.FrameRate=QTMData.Analog.Frequency;
-    DatastrRaw.EMG.DataLabel=Datastr.Info.EMGLabel;
+    if isfield(Datastr.Info, 'EMGLabel')
+        DatastrRaw.EMG.DataLabel=Datastr.Info.EMGLabel;
+    end
     DatastrRaw.EMG.Channels =QTMData.Analog.Data(AnaEMGInd, :)';
     
     Datastr.EMG = DatastrRaw.EMG;
