@@ -102,16 +102,21 @@ QTMData=importdata(fullFileName);
 % Put data into correct structure (Datastr that is used for further processing)
 % Marker data:
 DatastrRaw.Marker.FrameRate=QTMData.FrameRate;
-DatastrRaw.Marker.DataLabel=QTMData.Trajectories.Labeled.Labels;
-DatastrRaw.Marker.MarkerData=squeeze(QTMData.Trajectories.Labeled.Data(:,1:3,:))/1000;
-DatastrRaw.Marker.units = 'm';
+
+if isfield(QTMData, 'Trajectories')  % if marker exist, then load it
+    DatastrRaw.Marker.DataLabel=QTMData.Trajectories.Labeled.Labels;
+    DatastrRaw.Marker.MarkerData=squeeze(QTMData.Trajectories.Labeled.Data(:,1:3,:))/1000;
+    DatastrRaw.Marker.units = 'm';
+end
 
 % Store marker data into Datastr
 Datastr.Marker = DatastrRaw.Marker;
 
 if strcmp(fSign, 'True')
     % Force data: Label
-    DatastrRaw.Force.DataLabel = Datastr.Info.ForceLabel;
+    if isfield(Datastr.Info, 'ForceLabel')
+        DatastrRaw.Force.DataLabel = Datastr.Info.ForceLabel;
+    end
     
     % save data based on the order of force label and transform vector
     % ["Fx", "Fy", "Fz", "Mx", "My", "Mz",  "CoPx", "CoPy", "CoPz"]  
@@ -138,7 +143,9 @@ end
 if strcmp(eSign, 'True')
     % extract EMG data
     DatastrRaw.EMG.FrameRate=QTMData.Analog.Frequency;
-    DatastrRaw.EMG.DataLabel=Datastr.Info.EMGLabel;
+    if isfield(Datastr.Info, 'EMGLabel')
+        DatastrRaw.EMG.DataLabel=Datastr.Info.EMGLabel;
+    end
     DatastrRaw.EMG.Channels =QTMData.Analog.Data(AnaEMGInd, :)';
     
     Datastr.EMG = DatastrRaw.EMG;
