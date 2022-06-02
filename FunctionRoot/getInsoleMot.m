@@ -102,7 +102,11 @@ columnNames = {'time' ...
     'l_ground_torque_x' 'l_ground_torque_y' 'l_ground_torque_z' ... % Left Moments
     'ground_torque_x' 'ground_torque_y' 'ground_torque_z' }; % Right Moments
 
-nRowsIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);  % make sure the insole forces have the same rows as the IKAng
+if isfield(C3Ddata.Resample.Sych, "IKAngData")
+    nRowsIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);  % make sure the insole forces have the same rows as the IKAng
+else
+    nRowsIKAng = size(C3Ddata.Resample.IMU, 1);
+end
 
 if isfield(C3Ddata.Resample.Sych, 'DeltaT')
     sychT = C3Ddata.Resample.Sych.DeltaT.Force;

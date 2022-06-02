@@ -24,12 +24,12 @@ function [Datastr] = S13_toOS_Portable(Datastr, osFolder, osimDoFs)
 
 %% check input
 if strcmp(num2str(osimDoFs), '23')
-    IKheaders = ["time",	"pelvis_tilt",	"pelvis_list",	"pelvis_rotation",...
-               "pelvis_tx",	"pelvis_ty",	"pelvis_tz",	"hip_flexion_r",...
+    IKheaders = ["time",	"torso_tilt",	"torso_list",	"torso_rotation",...
+               "torso_tx",	"torso_ty",	"torso_tz",	"hip_flexion_r",...
                "hip_adduction_r", "hip_rotation_r", "knee_angle_r", "ankle_angle_r",...
                "subtalar_angle_r", "mtp_angle_r", "hip_flexion_l", "hip_adduction_l",...
                "hip_rotation_l", "knee_angle_l", "ankle_angle_l", "subtalar_angle_l",...
-               "mtp_angle_l",	"lumbar_extension",	"lumbar_bending",	"lumbar_rotation"];
+               "mtp_angle_l",	"L5_S1_Flex_Ext",	"L5_S1_Lat_Bending",	"L5_S1_axial_rotation"];
 else
     error('new headers are needed, if the Osim model is not Gait2392')
 end
@@ -55,8 +55,8 @@ trial = Datastr.Info.Trial;
 %% Folder 
 
 % Check if folder exist, if not create new
-if ~ exist([subjroot '\' osFolder],'dir')
-    mkdir(subjroot,osFolder);
+if ~ exist([subjroot '\' osFolder '\DataFiles'],'dir')
+    mkdir([subjroot '\' osFolder '\DataFiles']);
 end
 
 %% Export files

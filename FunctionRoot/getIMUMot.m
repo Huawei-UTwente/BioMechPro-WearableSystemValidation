@@ -61,9 +61,14 @@ else
     sychT = 0.05;
 end
 
-
-nFramesIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);
 nFramesIMU = size(C3Ddata.Resample.IMU, 1);
+
+if isfield(C3Ddata.Resample.Sych, "IKAngData")
+    nFramesIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);
+else
+    nFramesIKAng = nFramesIMU;
+end
+
 % IMUnFrames = size(C3Ddata.IMU.IMUData, 1);
 % sychronize with marker data
 
@@ -95,6 +100,8 @@ writeData = [...
 
 % File
 fid = fopen([filename 'IK_IMU.mot'],'w'); % note: w also discards existing content, if any
+
+
 if fid == -1
     error('getSto:FileID',['Cannot open ' infilename '.sto for writing. It might be in use.']);
 end

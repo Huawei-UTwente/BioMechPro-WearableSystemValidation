@@ -69,28 +69,31 @@ end
 
 
 %% start resampling
-for mk = 1:length(Datastr.Marker.MarkerData(:, 1, 1))
-    
-    MrData = squeeze(Datastr.Marker.MarkerData(mk, :, :));
-    time_frame = linspace(0,...
-        (length(MrData(1, :))-1)/Datastr.Marker.FrameRate,...
-        length(MrData(1, :)));
+if isfield(Datastr.Marker, "MarkerData")
+    for mk = 1:length(Datastr.Marker.MarkerData(:, 1, 1))
 
-    Datastr.Resample.Marker(:, :, mk) = ...
-        resample(MrData', time_frame, resampleRate, 'spline');
-    
-    % ressign the NaNs to the resampled marker trajectories
-    if ~isempty(find(isnan(MrData(1, :))==1))
-        id_nan_ori = find(isnan(MrData(1,:))==1);
-        id_nan_new = ceil(1 + resampleRate*(id_nan_ori-1)/Datastr.Marker.FrameRate);
-        id_nan_new(id_nan_new > size(Datastr.Resample.Marker, 1)) = [];
-        Datastr.Resample.Marker(id_nan_new, :, mk) = NaN;
+        MrData = squeeze(Datastr.Marker.MarkerData(mk, :, :));
+        time_frame = linspace(0,...
+            (length(MrData(1, :))-1)/Datastr.Marker.FrameRate,...
+            length(MrData(1, :)));
+
+        Datastr.Resample.Marker(:, :, mk) = ...
+            resample(MrData', time_frame, resampleRate, 'spline');
+
+        % ressign the NaNs to the resampled marker trajectories
+        if ~isempty(find(isnan(MrData(1, :))==1))
+            id_nan_ori = find(isnan(MrData(1,:))==1);
+            id_nan_new = ceil(1 + resampleRate*(id_nan_ori-1)/Datastr.Marker.FrameRate);
+            id_nan_new(id_nan_new > size(Datastr.Resample.Marker, 1)) = [];
+            Datastr.Resample.Marker(id_nan_new, :, mk) = NaN;
+        end
     end
+    
+    % remove 10 frames of data from the beginning and end
+    Datastr.Resample.Marker(1:remove_samples, :, :) = [];
+    Datastr.Resample.Marker(end-remove_samples:end, :, :) = [];
+    
 end
-
-% remove 10 frames of data from the beginning and end
-Datastr.Resample.Marker(1:remove_samples, :, :) = [];
-Datastr.Resample.Marker(end-remove_samples:end, :, :) = [];
 
 if isfield(Datastr, 'Force')
 

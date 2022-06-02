@@ -219,9 +219,12 @@ rows3 = strcmp(jointTable.jointNames,'jL1T12') & jointTable.ColIndx==3;
 rows4 = strcmp(jointTable.jointNames,'jT9T8') & jointTable.ColIndx==3;
 vars = {'Angles'};
 % in OpenSim the extension is positive, then a negative sign is added here
-lumbar_extension = -(jointTable{rows1,vars} + jointTable{rows2,vars} +...
-                  jointTable{rows3,vars} + jointTable{rows4,vars});
-
+% lumbar_extension = -(jointTable{rows1,vars} + jointTable{rows2,vars} +...
+%                   jointTable{rows3,vars} + jointTable{rows4,vars});
+              
+% only considering L5S1
+L5S1_extension = -(jointTable{rows1,vars});  
+              
 
 rows1 = strcmp(jointTable.jointNames,'jL5S1') & jointTable.ColIndx==1;
 rows2 = strcmp(jointTable.jointNames,'jL4L3') & jointTable.ColIndx==1;
@@ -229,17 +232,23 @@ rows3 = strcmp(jointTable.jointNames,'jL1T12') & jointTable.ColIndx==1;
 rows4 = strcmp(jointTable.jointNames,'jT9T8') & jointTable.ColIndx==1;
 vars = {'Angles'};   
 
-lumbar_bending = jointTable{rows1,vars} + jointTable{rows2,vars} +...
-                  jointTable{rows3,vars} + jointTable{rows4,vars};
+% lumbar_bending = jointTable{rows1,vars} + jointTable{rows2,vars} +...
+%                   jointTable{rows3,vars} + jointTable{rows4,vars};
+              
+% only considering L5S1
+L5S1_bending = jointTable{rows1,vars};                
+              
 rows1 = strcmp(jointTable.jointNames,'jL5S1') & jointTable.ColIndx==2;
 rows2 = strcmp(jointTable.jointNames,'jL4L3') & jointTable.ColIndx==2;
 rows3 = strcmp(jointTable.jointNames,'jL1T12') & jointTable.ColIndx==2;
 rows4 = strcmp(jointTable.jointNames,'jT9T8') & jointTable.ColIndx==2;
 vars = {'Angles'};
-lumbar_rotation = jointTable{rows1,vars} + jointTable{rows2,vars} +...
-                  jointTable{rows3,vars} + jointTable{rows4,vars};
 
+% lumbar_rotation = jointTable{rows1,vars} + jointTable{rows2,vars} +...
+%                   jointTable{rows3,vars} + jointTable{rows4,vars};
 
+% only considering L5S1
+L5S1_rotation = jointTable{rows1,vars};
 
 %Rest of vars
 rows = strcmp(jointTable.jointNames,'jRightHip') & jointTable.ColIndx==3;
@@ -345,8 +354,8 @@ if isfield(mvnData,'contact')
     Datastr.IMU.IMUContactRFoot = mvnData.contact;
 end
 
-Datastr.IMU.IMUData = [pelvis_tilt; pelvis_list; pelvis_rotation; pelvis_tx;  pelvis_ty; pelvis_tz; hip_flexion_r; hip_adduction_r; hip_rotation_r; knee_angle_r; knee_adduction_r; knee_rotation_r; ankle_angle_r; ankle_adduction_r; subtalar_angle_r; mtp_angle_r; hip_flexion_l; hip_adduction_l; hip_rotation_l; knee_angle_l; knee_adduction_l; knee_rotation_l; ankle_angle_l; ankle_adduction_l; subtalar_angle_l; mtp_angle_l; lumbar_extension; lumbar_bending; lumbar_rotation]';
-Datastr.IMU.IMUDataLabel = {'pelvis_tilt' 'pelvis_list' 'pelvis_rotation' 'pelvis_tx' 'pelvis_ty' 'pelvis_tz' 'hip_flexion_r' 'hip_adduction_r' 'hip_rotation_r' 'knee_angle_r' 'knee_adduction_r' 'knee_rotation_r' 'ankle_angle_r' 'ankle_adduction_r' 'subtalar_angle_r' 'mtp_angle_r' 'hip_flexion_l' 'hip_adduction_l' 'hip_rotation_l' 'knee_angle_l' 'knee_adduction_l' 'knee_rotation_l' 'ankle_angle_l' 'ankle_adduction_l' 'subtalar_angle_l' 'mtp_angle_l' 'lumbar_extension' 'lumbar_bending' 'lumbar_rotation'};
+Datastr.IMU.IMUData = [pelvis_tilt; pelvis_list; pelvis_rotation; pelvis_tx;  pelvis_ty; pelvis_tz; hip_flexion_r; hip_adduction_r; hip_rotation_r; knee_angle_r; knee_adduction_r; knee_rotation_r; ankle_angle_r; ankle_adduction_r; subtalar_angle_r; mtp_angle_r; hip_flexion_l; hip_adduction_l; hip_rotation_l; knee_angle_l; knee_adduction_l; knee_rotation_l; ankle_angle_l; ankle_adduction_l; subtalar_angle_l; mtp_angle_l; L5S1_extension; L5S1_bending; L5S1_rotation]';
+Datastr.IMU.IMUDataLabel = {'torso_tilt' 'torso_list' 'torso_rotation' 'torso_tx' 'torso_ty' 'torso_tz' 'hip_flexion_r' 'hip_adduction_r' 'hip_rotation_r' 'knee_angle_r' 'knee_adduction_r' 'knee_rotation_r' 'ankle_angle_r' 'ankle_adduction_r' 'subtalar_angle_r' 'mtp_angle_r' 'hip_flexion_l' 'hip_adduction_l' 'hip_rotation_l' 'knee_angle_l' 'knee_adduction_l' 'knee_rotation_l' 'ankle_angle_l' 'ankle_adduction_l' 'subtalar_angle_l' 'mtp_angle_l' 'L5_S1_Flex_Ext' 'L5_S1_Lat_Bending' 'L5_S1_axial_rotation'};
 Datastr.IMU.CoM = [CoMx, CoMy, CoMz];
 Datastr.IMU.Sensor = mvnData.sensors;
 Datastr.IMU.IMUFrameRate = round( 1 ./ mean(diff(mvnData.time(1:end-1))) );%% should be  sampling frequency from MVN link (240Hz)
