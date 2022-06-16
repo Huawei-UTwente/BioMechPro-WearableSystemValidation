@@ -20,6 +20,10 @@
 ### Outputs ###
 * Processed dataset in the shared Zenodo project: https://doi.org/10.5281/zenodo.6457662
 
+### Attentions ###
+* To use this pipeline, there is no need to link Matlab and OpenSim, just provide the OpenSim installation path is fine
+* OpenSim does not like 'space' in both file paths and names, please avoid it, in order to make IK and ID work
+
 ### Contribution guidelines ###
 * push corrections
 * Clone the development branch and push new modules
