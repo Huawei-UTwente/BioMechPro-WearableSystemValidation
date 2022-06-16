@@ -181,7 +181,7 @@ jointTable.Angles(length(jointNames),:) = Time;
 [z,y,x]=quat2angle(mvnData.segments.orientation.Pelvis(:,:));
 
 % if the orentations are close to pi/-pi, then compensate them to zero
-for io = 1:length(x)
+for io = 1:length(z) - 1
 %     if x(io) > pi/2
 %         x(io) = x(io) - pi;
 %     elseif x(io) < -pi/2
@@ -194,9 +194,12 @@ for io = 1:length(x)
 %         y(io) = y(io) + pi;
 %     end
     
-    if z(io) < 0
-        z(io) = z(io) + 2*pi;
+    if z(io + 1) - z(io) > pi
+        z(io + 1) = z(io + 1) - 2*pi;
+    elseif z(io + 1) - z(io) < -pi
+        z(io + 1) = z(io + 1) + 2*pi;
     end
+
 end
 
 % assign the extracted & compenstated pelvis orientations
