@@ -32,7 +32,7 @@ function [Datastr] = S21_exportEMG(Datastr, osFolder, EMGOutput, EMGFormat, norT
 
 %% Check input
 
-if ~isfield(Datastr.Resample.Sych,'EMG') %if no EMG data
+if ~isfield(Datastr.Resample,'EMG') %if no EMG data
     warning(['No field EMG file ' Datastr.Info.Trial '. Skipping.']);
     return;
 end
@@ -64,25 +64,31 @@ trialOutputPath = [subjroot '\' osFolder '\' subjroot(bckslsh(end)+1:end) trial 
 % EMG is exported at the resampling frame rate
 markerFrameRate = Datastr.Resample.FrameRate;
 
-
-
-UnNormEMG = Datastr.Resample.Sych.EMG(:, strcmp(EMGOutput, Datastr.EMG.DataLabel));
+emgoutid = [];
+for emgoutput = EMGOutput
+    emgoutid = [emgoutid, find(strcmp(emgoutput, Datastr.EMG.DataLabel) == 1)];
+end
+UnNormEMG = Datastr.Resample.Sych.EMG(:, emgoutid);
 
 if strcmp(norType, 'dynMVC')
     dynMVC = importdata([subjroot '/dynMVCvalue.mat']);
-    NormEMG = UnNormEMG./dynMVC(strcmp(EMGOutput, Datastr.EMG.DataLabel));
-    Datastr.Resample.Sych.EMGExpdynNorFlag = 1;
-    Datastr.Resample.Sych.EMGExpNorFlag = 0;
+    NormEMG = UnNormEMG./dynMVC(emgoutid);
+    Datastr.Resample.Sych.NormEMGLabel = EMGOutput;
+    Datastr.Resample.Sych.NormEMGData = NormEMG;
+    Datastr.Resample.Sych.NormEMG.EMGExpdynNorFlag = 1;
+    Datastr.Resample.Sych.NormEMG.EMGExpNorFlag = 0;
     
 elseif strcmp(norType, 'MVC')
     MVC = importdata([subjroot '/MVCvalue.mat']);
-    NormEMG = UnNormEMG./MVC(strcmp(EMGOutput, Datastr.EMG.DataLabel));
-    Datastr.Resample.Sych.EMGExpdynNorFlag = 0;
-    Datastr.Resample.Sych.EMGExpNorFlag = 1;
+    NormEMG = UnNormEMG./MVC(emgoutid);
+    Datastr.Resample.Sych.NormEMGLabel = EMGOutput;
+    Datastr.Resample.Sych.NormEMGData = NormEMG;
+    Datastr.Resample.NormEMG.EMGExpdynNorFlag = 0;
+    Datastr.Resample.NormEMG.EMGExpNorFlag = 1;
 else
     NormEMG = UnNormEMG;
-    Datastr.Resample.Sych.EMGExpdynNorFlag = 0;
-    Datastr.Resample.Sych.EMGExpNorFlag = 0;
+    Datastr.Resample.NormEMG.EMGExpdynNorFlag = 0;
+    Datastr.Resample.NormEMG.EMGExpNorFlag = 0;
 end
 
 EMGtime = (0:size(NormEMG ,1)-1)'./markerFrameRate;

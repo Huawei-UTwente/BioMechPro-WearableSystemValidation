@@ -25,8 +25,12 @@ end
 leftInsole = InsoleRaw.data(InsoleRaw.data(:, 2) == leftID, [1, 3:length(InsoleRaw.data(1, :))]);
 leftInsole(:, 1) = leftInsole(:, 1) - leftInsole(1, 1);
 
+leftInsole(leftInsole(:, 1) <= 0, :) = [];
+
 rightInsole = InsoleRaw.data(InsoleRaw.data(:, 2) == rightID, [1, 3:length(InsoleRaw.data(1, :))]);
 rightInsole(:, 1) = rightInsole(:, 1) - rightInsole(1, 1);
+
+rightInsole(rightInsole(:, 1) <= 0, :) = [];
 
 % save to InsoleProc strcture
 

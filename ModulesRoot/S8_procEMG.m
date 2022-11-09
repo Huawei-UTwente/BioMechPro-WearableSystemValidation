@@ -39,7 +39,12 @@ end
         % get EMG envelope
         EMG_envelope = getEMGEnvelop(emgData', fs_emg);
 
-        Datastr.EMG.EMGLinEnv = EMG_envelope;
+        % further smooth the EMG envelopes
+        fs_cutoff = 6;  %% cut-off frequency of the smoothness
+        movingWindow = round(fs_emg/fs_cutoff);
+        EMG_smooth = getMovingAverage(EMG_envelope,movingWindow);
+
+        Datastr.EMG.EMGLinEnv = EMG_smooth;
         Datastr.EMG.mvcNorFlag = 0;
         Datastr.EMG.dynNorFlag = 0;
 

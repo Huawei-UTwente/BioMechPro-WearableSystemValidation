@@ -54,28 +54,35 @@ writeHeader = IKheaders;
 FrameRate = C3Ddata.Resample.FrameRate;
 % IMUFrameRate = C3Ddata.IMU.IMUFrameRate;
 % nDoFs = length(writeHeader) - 1;
-
-if isfield(C3Ddata.Resample.Sych, 'DeltaT')
-    sychT = C3Ddata.Resample.Sych.DeltaT.Motion;
+if isfield(C3Ddata.Resample, 'Sych')
+    if isfield(C3Ddata.Resample.Sych, 'DeltaT')
+        sychT = C3Ddata.Resample.Sych.DeltaT.Motion;
+    else
+        sychT = 0.0;
+    end
 else
-    sychT = 0.05;
+    sychT = 0.0;
 end
 
 nFramesIMU = size(C3Ddata.Resample.IMU, 1);
-
-if isfield(C3Ddata.Resample.Sych, "IKAngData")
-    nFramesIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);
+if isfield(C3Ddata.Resample, 'Sych')
+    if isfield(C3Ddata.Resample.Sych, "IKAngData")
+        nFramesIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);
+    else
+        nFramesIKAng = nFramesIMU;
+    end
 else
-    nFramesIKAng = nFramesIMU;
+    nFramesIKAng = size(C3Ddata.Resample.IMU, 1);
 end
+
 
 % IMUnFrames = size(C3Ddata.IMU.IMUData, 1);
 % sychronize with marker data
 
-IMUData = interp1((0:nFramesIMU-1)/FrameRate, C3Ddata.Resample.IMU(1:nFramesIMU, index_select),...
-          (0:nFramesIKAng-1)/FrameRate + sychT, 'linear', 'extrap');
-CoMData = interp1((0:nFramesIMU-1)/FrameRate, C3Ddata.Resample.CoM(1:nFramesIMU, :),...
-          (0:nFramesIKAng-1)/FrameRate + sychT, 'linear', 'extrap');
+IMUData = C3Ddata.Resample.Sych.IMU(:, index_select); % interp1((0:nFramesIMU-1)/FrameRate, C3Ddata.Resample.IMU(1:nFramesIMU, index_select),...
+          % (0:nFramesIKAng-1)/FrameRate + sychT, 'linear', 'extrap');
+%CoMData = interp1((0:nFramesIMU-1)/FrameRate, C3Ddata.Resample.CoM(1:nFramesIMU, :),...
+%          (0:nFramesIKAng-1)/FrameRate + sychT, 'linear', 'extrap');
 
 % If full path is supplied, take last part for name inside trc file
 if ~isempty(strfind(filename, '\'))
@@ -136,6 +143,6 @@ disp([infilename 'IK_IMU.sto created in ' pathname]);
 
 C3Ddata.Resample.Sych.IMUAngData = writeData;
 C3Ddata.Resample.Sych.IMUAngDataLabel = IKheaders;
-C3Ddata.Resample.Sych.CoM = CoMData;
+% C3Ddata.Resample.Sych.CoM = CoMData;
 
 end

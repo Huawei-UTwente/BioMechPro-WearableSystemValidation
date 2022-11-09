@@ -69,7 +69,7 @@ end
 
 
 %% start resampling
-if isfield(Datastr.Marker, "MarkerData")
+if isfield(Datastr, "Marker")
     for mk = 1:length(Datastr.Marker.MarkerData(:, 1, 1))
 
         MrData = squeeze(Datastr.Marker.MarkerData(mk, :, :));

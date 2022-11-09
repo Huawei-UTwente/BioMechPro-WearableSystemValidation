@@ -138,7 +138,6 @@ end
 if exist('err.log','file')
     
     % Check if error log is empty
-
     fid = fopen('err.log','r');
     if fid ~= -1
         foo = fread(fid);

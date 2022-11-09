@@ -102,27 +102,36 @@ columnNames = {'time' ...
     'l_ground_torque_x' 'l_ground_torque_y' 'l_ground_torque_z' ... % Left Moments
     'ground_torque_x' 'ground_torque_y' 'ground_torque_z' }; % Right Moments
 
-if isfield(C3Ddata.Resample.Sych, "IKAngData")
-    nRowsIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);  % make sure the insole forces have the same rows as the IKAng
+
+if isfield(C3Ddata.Resample, "Sych")
+    if isfield(C3Ddata.Resample.Sych, "IKAngData")
+        nRowsIKAng = size(C3Ddata.Resample.Sych.IKAngData, 1);  % make sure the insole forces have the same rows as the IKAng
+    else
+        nRowsIKAng = size(C3Ddata.Resample.Sych.IMU, 1);
+    end
 else
-    nRowsIKAng = size(C3Ddata.Resample.IMU, 1);
+    nRowsIKAng = size(C3Ddata.Resample.Sych.IMU, 1);
 end
 
-if isfield(C3Ddata.Resample.Sych, 'DeltaT')
-    sychT = C3Ddata.Resample.Sych.DeltaT.Force;
+if isfield(C3Ddata.Resample, "Sych")
+    if isfield(C3Ddata.Resample.Sych, 'DeltaT')
+        sychT = C3Ddata.Resample.Sych.DeltaT.Force;
+    else
+        sychT = -2.22;
+    end
 else
-    sychT = 0.1;
+    sychT = -2.22;
 end
 
-left_force = interp1((0:size(C3Ddata.Resample.Insole.Left, 1)-1)/FrameRate,...
-             C3Ddata.Resample.Insole.Left(:, 23:25),...
-             (0:nRowsIKAng-1)/FrameRate + sychT,...
-             'linear', 'extrap');
+left_force = C3Ddata.Resample.Sych.Insole.Left(:, 23:25);  % interp1((0:size(C3Ddata.Resample.Insole.Left, 1)-1)/FrameRate,...
+             % C3Ddata.Resample.Insole.Left(:, 23:25),...
+             % (0:nRowsIKAng-1)/FrameRate + sychT,...
+             %  'linear', 'extrap');
          
-right_force = interp1((0:size(C3Ddata.Resample.Insole.Right, 1)-1)/FrameRate,...
-             C3Ddata.Resample.Insole.Right(:, 23:25),...
-             (0:nRowsIKAng-1)/FrameRate + sychT,...
-             'linear', 'extrap');
+right_force = C3Ddata.Resample.Sych.Insole.Right(:, 23:25); %interp1((0:size(C3Ddata.Resample.Insole.Right, 1)-1)/FrameRate,...
+             % C3Ddata.Resample.Insole.Right(:, 23:25),...
+             % (0:nRowsIKAng-1)/FrameRate + sychT,...
+             % 'linear', 'extrap');
 
 %% Get number of force samples equal to number of marker samples
 
