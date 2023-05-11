@@ -29,4 +29,4 @@
 * Clone the development branch and push new modules
 
 ### Who do I talk to? ###
-* Huawei Wang: h.wang-2@utwente.nl
+* Huawei Wang: huawei.wang.buaa@gmail.com
